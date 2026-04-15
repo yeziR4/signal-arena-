@@ -1,0 +1,2 @@
+[build]
+nixPacksNodeVersion = "22.13.0"
