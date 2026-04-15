@@ -1,0 +1,42 @@
+[
+  {
+    "id": "FT-1",
+    "title": "Strict Branding & Landing Check",
+    "description": "Verify Signal Arena branding and core navigation elements are present and functional.",
+    "steps": [
+      "Navigate to http://localhost:3000",
+      "Assert that 'Signal Arena' text is visible in the header",
+      "Assert that 'Market Discovery' heading is visible",
+      "Assert that a CTA button with text 'Manually Resolve Asset' exists",
+      "Verify at least one market card with a symbol and a price is rendered"
+    ],
+    "priority": "High"
+  },
+  {
+    "id": "FT-2",
+    "title": "Full Arena Settlement Flow (AAPL)",
+    "description": "Trace a complete market resolution from landing to AI decision output.",
+    "steps": [
+      "Navigate to http://localhost:3000/search",
+      "Type 'AAPL' into the search input field",
+      "Click the 'Resolve' button",
+      "Assert that 'Apple Inc' header is displayed",
+      "Click the 'BET / EVALUATE' button",
+      "Wait for AI models to respond",
+      "Assert that 'Neural Reasoning' text section is visible"
+    ],
+    "priority": "Critical"
+  },
+  {
+    "id": "FT-3",
+    "title": "Leaderboard Data Integrity",
+    "description": "Ensure the leaderboard renders actual competitive data, not just an empty table.",
+    "steps": [
+      "Navigate to http://localhost:3000/leaderboard",
+      "Assert 'Arena Leaderboard' title exists",
+      "Verify at least one trader card in the top 3 podium is visible",
+      "Assert that raw metrics like '% ROI' are displayed"
+    ],
+    "priority": "High"
+  }
+]

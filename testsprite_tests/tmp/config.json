@@ -1,0 +1,17 @@
+{
+  "type": "frontend",
+  "localEndpoint": "http://localhost:3000",
+  "status": "commited",
+  "executionArgs": {
+    "projectName": "signal-arena",
+    "projectPath": "c:\\Users\\yezir\\.gemini\\antigravity\\scratch\\signal-arena",
+    "testIds": [
+      "FT-3"
+    ],
+    "additionalInstruction": "STRICT FUNCTIONAL UI TESTING: Follow docs/prd.md and testsprite_frontend_test_plan.json precisely. Verify actual UI content, state changes...",
+    "envs": {
+      "API_KEY": "sk-user-6HJqQchm-4ez9Cy_abWxbwJno1iYyVnjw0dhhP_dksi89NNLG4k-o-_DK9gFBqhZl-0zHLdWc81jvasfi9-ekKH70DL-tBqPJt9hMGNQan5nda8V7XnmpDmT0SelBZvAy_Q"
+    }
+  },
+  "serverPort": 55747
+}

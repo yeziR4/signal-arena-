@@ -1,0 +1,158 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model AiTrader {
+  id                String          @id @default(cuid())
+  slug              String          @unique
+  name              String
+  modelKey          String
+  provider          String
+  startingCapital   Float           @default(500)
+  totalCapital      Float           @default(500)
+  availableCapital  Float           @default(500)
+  realizedPnl       Float           @default(0)
+  unrealizedPnl     Float           @default(0)
+  totalTrades       Int             @default(0)
+  winningTrades     Int             @default(0)
+  losingTrades      Int             @default(0)
+  lastActionSummary String?
+  enabled           Boolean         @default(true)
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  positions       Position[]
+  tradeDecisions  TradeDecision[]
+  userTraderStats UserTraderStats[]
+}
+
+model UserTraderStats {
+  id                String   @id @default(cuid())
+  anonymousId       String
+  aiTraderId        String
+  totalCapital      Float    @default(500)
+  availableCapital  Float    @default(500)
+  realizedPnl       Float    @default(0)
+  unrealizedPnl     Float    @default(0)
+  totalTrades       Int      @default(0)
+  winningTrades     Int      @default(0)
+  losingTrades      Int      @default(0)
+  lastActionSummary String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  aiTrader AiTrader @relation(fields: [aiTraderId], references: [id])
+
+  @@unique([anonymousId, aiTraderId])
+}
+
+model Asset {
+  id         String   @id @default(cuid())
+  externalId String?
+  symbol     String
+  name       String
+  type       String // stock | crypto | prediction_market
+  slug       String?
+  source     String
+  iconUrl    String?
+  metadata   String   @default("{}")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  marketSnapshots  MarketSnapshot[]
+  positions        Position[]
+  tradeDecisions   TradeDecision[]
+  watchlistMarkets WatchlistMarket[]
+
+  @@unique([symbol, type])
+}
+
+model MarketSnapshot {
+  id             String   @id @default(cuid())
+  assetId        String
+  price          Float
+  change24h      Float?
+  volume         Float?
+  probabilityYes Float?
+  probabilityNo  Float?
+  rawData        String   @default("{}")
+  capturedAt     DateTime @default(now())
+
+  asset Asset @relation(fields: [assetId], references: [id])
+}
+
+model Position {
+  id               String    @id @default(cuid())
+  anonymousId      String?   @default("global")
+  aiTraderId       String
+  assetId          String
+  sourceAnalysisId String?
+  direction        String // long | short | yes | no
+  status           String    @default("open") // open | closed
+  sizeUsd          Float
+  quantity         Float?
+  entryPrice       Float
+  currentPrice     Float
+  exitPrice        Float?
+  pnl              Float     @default(0)
+  pnlPercent       Float     @default(0)
+  stopLoss         Float?
+  takeProfit       Float?
+  confidence       Float
+  reasoning        String
+  riskNote         String?
+  timeHorizon      String?
+  openedAt         DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  closedAt         DateTime?
+
+  aiTrader AiTrader @relation(fields: [aiTraderId], references: [id])
+  asset    Asset    @relation(fields: [assetId], references: [id])
+
+  @@index([anonymousId])
+}
+
+model TradeDecision {
+  id             String   @id @default(cuid())
+  anonymousId    String?  @default("global")
+  aiTraderId     String
+  assetId        String
+  action         String // open | hold | close | scale_in | scale_out | skip
+  direction      String // long | short | yes | no | none
+  confidence     Float
+  sizeUsd        Float
+  reasoning      String
+  riskNote       String?
+  closeReason    String?
+  rawModelOutput String   @default("{}")
+  createdAt      DateTime @default(now())
+
+  aiTrader AiTrader @relation(fields: [aiTraderId], references: [id])
+  asset    Asset    @relation(fields: [assetId], references: [id])
+
+  @@index([anonymousId])
+}
+
+model WatchlistMarket {
+  id        String   @id @default(cuid())
+  assetId   String
+  featured  Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  asset Asset @relation(fields: [assetId], references: [id])
+}
+
+model TestSpriteProof {
+  id          String   @id @default(cuid())
+  title       String
+  flow        String
+  status      String
+  bugFound    Boolean  @default(false)
+  description String
+  createdAt   DateTime @default(now())
+}

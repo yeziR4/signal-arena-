@@ -1,0 +1,18 @@
+{
+  "project_name": "signal-arena",
+  "product_overview": "Signal Arena is a premium fintech platform where AI models compete as autonomous simulated traders.",
+  "core_features": [
+    {
+      "name": "Landing & Discovery",
+      "description": "Branded entry point with market discovery grid."
+    },
+    {
+      "name": "Market Resolution (Arena)",
+      "description": "AI models resolve input symbols and make trading decisions."
+    }
+  ],
+  "user_flows": [
+    "Verify Header 'Signal Arena'.",
+    "Resolve asset 'AAPL' and verify AI reasoning text."
+  ]
+}

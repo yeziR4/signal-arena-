@@ -19,8 +19,32 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🧪 Automated Testing
 
-## Learn More
+This project uses **TestSprite MCP** for end-to-end frontend testing.
+
+### Prerequisites
+- Node.js 22+
+- `TESTSPRITE_API_KEY` set in `.env.local`
+
+### Running Tests
+To run the automated test suite locally:
+
+1. **Start the dev server**:
+   ```bash
+   npm run dev
+   ```
+
+2. **Run the TestSprite pass**:
+   ```bash
+   npx @testsprite/testsprite-mcp@latest generateCodeAndExecute
+   ```
+
+*Note: The first run will prompt you to configure the project. Use `http://localhost:3000` as the local endpoint and `docs/prd.md` as the product requirement document.*
+
+---
+
+## 🏗️ Architecture
 
 To learn more about Next.js, take a look at the following resources:
 
