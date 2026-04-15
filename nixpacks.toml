@@ -1,0 +1,6 @@
+[variables]
+NIXPACKS_NODE_VERSION = "22.13.0"
+NODE_VERSION = "22.13.0"
+
+[phases.setup]
+nixPkgs = ["...", "nodejs_22"]
