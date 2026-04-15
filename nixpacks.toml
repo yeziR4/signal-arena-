@@ -1,10 +1,2 @@
-[variables]
-NIXPACKS_NODE_VERSION = "22.13.0"
-NODE_VERSION = "22.13.0"
-
-[phases.setup]
-nixPkgs = ["nodejs_22", "npm-10_x"]
-
 [phases.install]
 cmds = ["npm install --legacy-peer-deps"]
-matched_files = ["package.json"]
