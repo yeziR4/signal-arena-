@@ -31,13 +31,20 @@ interface Market {
 export default function Home() {
   const [activeTab, setActiveTab] = useState<string>("all");
 
-  const { data: markets, isLoading } = useQuery<Market[]>({
+  const { data: markets, isLoading, isError } = useQuery<Market[]>({
     queryKey: ["markets", "trending"],
     queryFn: async () => {
-      const res = await fetch("/api/markets/trending");
-      if (!res.ok) throw new Error("Failed to fetch markets");
-      return res.json();
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 second timeout
+      try {
+        const res = await fetch("/api/markets/trending", { signal: controller.signal });
+        if (!res.ok) throw new Error("Failed to fetch markets");
+        return await res.json();
+      } finally {
+        clearTimeout(timeoutId);
+      }
     },
+    retry: 2,
   });
 
   const filteredMarkets = markets?.filter(m => activeTab === "all" || m.type === activeTab) || [];
@@ -59,8 +66,8 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mt-4">
-          <div className="bg-[#161619] border border-white/5 rounded-2xl p-1.5 flex w-fit">
+        <div className="flex flex-col md:flex-row lg:items-center justify-between gap-6 mt-4">
+          <div className="bg-[#161619] border border-white/5 rounded-2xl p-1.5 flex flex-wrap sm:flex-nowrap w-full lg:w-fit gap-1">
             {[
               { id: "all", label: "All", icon: <Globe className="w-4 h-4" /> },
               { id: "stock", label: "Stocks", icon: <LineChart className="w-4 h-4" /> },
@@ -70,7 +77,7 @@ export default function Home() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-6 py-2.5 text-xs font-black rounded-xl transition-all uppercase tracking-widest ${
+                className={`flex flex-1 justify-center items-center gap-2 px-4 py-2.5 text-[10px] sm:text-xs md:text-sm font-black rounded-xl transition-all uppercase tracking-widest ${
                   activeTab === tab.id ? "bg-white text-black shadow-lg" : "text-zinc-500 hover:text-white"
                 }`}
               >
@@ -101,6 +108,14 @@ export default function Home() {
             </div>
           </div>
           <span className="text-xs font-black uppercase tracking-[0.3em] text-zinc-500">Synchronizing Global Data...</span>
+        </div>
+      ) : isError ? (
+        <div className="py-40 flex flex-col items-center justify-center gap-6 glass-panel rounded-[4rem] text-zinc-700 border-red-500/10 bg-red-500/5">
+          <Globe className="w-16 h-16 opacity-30 text-red-500" />
+          <div className="flex flex-col items-center gap-2">
+            <span className="text-lg font-black text-red-400">Connection Interrupted</span>
+            <span className="text-[10px] uppercase font-bold tracking-[0.3em] text-zinc-500 text-center max-w-xs">Failed to synchronize due to a network timeout. Check your connection or disable aggressive tracker blockers.</span>
+          </div>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
@@ -179,7 +194,7 @@ export default function Home() {
         </div>
       )}
 
-      {!isLoading && filteredMarkets.length === 0 && (
+      {(!isLoading && !isError && filteredMarkets.length === 0) && (
          <div className="py-40 flex flex-col items-center justify-center gap-6 glass-panel rounded-[4rem] text-zinc-700 border-white/5">
             <BarChart2 className="w-16 h-16 opacity-10" />
             <div className="flex flex-col items-center gap-2">

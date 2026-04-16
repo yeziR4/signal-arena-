@@ -14,6 +14,7 @@ import Ticker from "@/components/Ticker";
 import Providers from "@/components/Providers";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import ThemeToggle from "@/components/ThemeToggle";
+import { Globe, Search, Trophy, Briefcase } from "lucide-react";
 
 export default function RootLayout({
   children,
@@ -61,7 +62,28 @@ export default function RootLayout({
               </div>
             </div>
           </header>
-          <main className="flex-1 flex flex-col">{children}</main>
+          <main className="flex-1 flex flex-col pb-20 md:pb-0">{children}</main>
+          
+          {/* Mobile Bottom Navigation */}
+          <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[var(--bg-primary)]/95 backdrop-blur-xl border-t border-[var(--border-subtle)] pb-safe pt-2 px-6 flex items-center justify-between shadow-2xl">
+            <Link href="/" className="flex flex-col items-center gap-1 p-2 text-[var(--text-tertiary)] hover:text-[var(--text-primary)]">
+              <Globe className="w-5 h-5" />
+              <span className="text-[9px] font-black uppercase tracking-wider">Markets</span>
+            </Link>
+            <Link href="/search" className="flex flex-col items-center gap-1 p-2 text-[var(--text-tertiary)] hover:text-[var(--text-primary)]">
+              <Search className="w-5 h-5" />
+              <span className="text-[9px] font-black uppercase tracking-wider">Search</span>
+            </Link>
+            <Link href="/leaderboard" className="flex flex-col items-center gap-1 p-2 text-[var(--text-tertiary)] hover:text-[var(--text-primary)]">
+              <Trophy className="w-5 h-5" />
+              <span className="text-[9px] font-black uppercase tracking-wider">Ranks</span>
+            </Link>
+            <Link href="/portfolio" className="flex flex-col items-center gap-1 p-2 text-[var(--text-tertiary)] hover:text-[var(--text-primary)]">
+              <Briefcase className="w-5 h-5" />
+              <span className="text-[9px] font-black uppercase tracking-wider">Portfolio</span>
+            </Link>
+          </nav>
+
           <ThemeToggle />
         </Providers>
       </ThemeProvider>
