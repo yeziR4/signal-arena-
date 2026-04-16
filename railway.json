@@ -4,7 +4,7 @@
     "builder": "NIXPACKS"
   },
   "deploy": {
-    "startCommand": "npx prisma db push && npx tsx prisma/seed.ts && npm start",
+    "startCommand": "npx prisma db push --accept-data-loss && npx tsx prisma/seed.ts && npm start",
     "restartPolicyType": "ON_FAILURE",
     "healthcheckPath": "/",
     "healthcheckTimeout": 120
