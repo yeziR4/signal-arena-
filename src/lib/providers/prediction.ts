@@ -108,8 +108,8 @@ export async function getClosingSoonPredictionMarkets(): Promise<ResolvedMarket[
     try {
         const params = new URLSearchParams({
             status: "open",
-            limit: "25", // Fetch a larger batch to sort locally
-            min_volume: "1000", // Lower threshold for "Closing Soon" variety
+            limit: "50", // Fetch even more to ensure we have variety
+            min_volume: "0", // Show all open markets to ensure loading
         });
 
         const res = await fetch(`${DOME_API_BASE}/polymarket/markets?${params.toString()}`, {
@@ -127,26 +127,30 @@ export async function getClosingSoonPredictionMarkets(): Promise<ResolvedMarket[
         
         // Filter and sort by closing date (ascending)
         const markets = (data.markets || [])
-            .filter((m: any) => m.end_date && new Date(m.end_date).getTime() > now)
-            .sort((a: any, b: any) => new Date(a.end_date).getTime() - new Date(b.end_date).getTime())
-            .slice(0, 6);
+            .map((m: any) => ({
+                ...m,
+                parsedEndDate: m.end_time ? new Date(m.end_time * 1000) : m.end_date ? new Date(m.end_date) : null
+            }))
+            .filter((m: any) => m.parsedEndDate && m.parsedEndDate.getTime() > now)
+            .sort((a: any, b: any) => a.parsedEndDate.getTime() - b.parsedEndDate.getTime())
+            .slice(0, 10);
 
         return markets.map((market: any) => {
             const probYes = parseFloat(market.outcome_prices?.[0] || "0.5");
-            const endDate = market.end_date ? new Date(market.end_date).toLocaleDateString() : "Soon";
+            const endDateString = market.parsedEndDate ? market.parsedEndDate.toLocaleDateString() : "Soon";
             
             return {
                 id: `pred-${market.condition_id || market.token_id}`,
                 symbol: market.market_slug?.toUpperCase().slice(0, 10) || "PRED",
-                name: market.question,
+                name: market.title || market.question || "Unknown Event",
                 type: "prediction_market" as const,
                 currentPrice: probYes,
                 change24h: (Math.random() * 4 - 2), // Simulated for UI feel
                 chartData: generatePredictionChart(probYes),
                 metadata: { 
                     volume: parseFloat(market.volume_total || market.volume || "0"),
-                    endDate: market.end_date,
-                    closeDisplay: `Closes ${endDate}`
+                    endDate: market.parsedEndDate?.toISOString(),
+                    closeDisplay: `Closes ${endDateString}`
                 },
                 source: "polymarket",
                 iconUrl: market.image || market.icon || undefined,

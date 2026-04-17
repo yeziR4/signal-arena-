@@ -61,23 +61,33 @@ export async function updateAllActivePositions(targetAnonymousId?: string) {
 
     if (openPositions.length === 0) return;
 
-    const assetPriceCache = new Map<string, { price: number, iconUrl?: string }>();
+    // 1. Identify distinct assets to update for efficiency
+    const distinctAssets = Array.from(new Set(openPositions.map(p => p.asset.symbol)));
+    console.log(`[PnL Sync] Updating ${openPositions.length} positions across ${distinctAssets.length} distinct assets...`);
 
-    // 1. Update individual positions
-    for (const position of openPositions) {
-        let currentData = assetPriceCache.get(position.asset.symbol);
-        
-        if (!currentData) {
-            const result = await resolveInput(position.asset.symbol);
+    const assetPriceCache = new Map<string, { price: number, iconUrl?: string }>();
+    
+    // Fetch prices in parallel
+    await Promise.all(distinctAssets.map(async (symbol) => {
+        try {
+            const result = await resolveInput(symbol);
             if (result.success && result.data) {
-                currentData = { 
+                assetPriceCache.set(symbol, { 
                     price: result.data.currentPrice, 
                     iconUrl: result.data.iconUrl 
-                };
-                assetPriceCache.set(position.asset.symbol, currentData);
+                });
+            } else {
+                console.warn(`[PnL Sync] Failed to resolve price for ${symbol}: ${result.error}`);
             }
+        } catch (err: any) {
+            console.error(`[PnL Sync] Error resolving ${symbol}:`, err.message);
         }
+    }));
 
+    // 2. Update individual positions in DB
+    const updatePromises = openPositions.map(async (position) => {
+        const currentData = assetPriceCache.get(position.asset.symbol);
+        
         if (currentData) {
             try {
                 const { pnl, pnlPercent } = calculatePnl(
@@ -108,10 +118,13 @@ export async function updateAllActivePositions(targetAnonymousId?: string) {
                     }
                 }
             } catch (posError: any) {
-                console.error(`Failed to update position ${position.id}:`, posError.message);
+                console.error(`[PnL Sync] Failed to update position ${position.id}:`, posError.message);
             }
         }
-    }
+    });
+
+    await Promise.all(updatePromises);
+    console.log(`[PnL Sync] Completed updates for all open positions.`);
 
     // 2. Identify unique (anonymousId, aiTraderId) pairs that need stat updates
     const userTraderPairs = new Set<string>();
