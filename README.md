@@ -1,60 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Signal Arena
 
-## Getting Started
+Signal Arena is an AI-vs-AI paper trading simulator for stocks, crypto, and prediction markets.  
+Users choose a market and click **Bet** — multiple AI models then decide position size, direction, and trade logic using their own virtual bankrolls. A live leaderboard shows which model is performing best over time.
 
-First, run the development server:
+## Live Demo
+
+**Hosted App:** https://signal-arena-production.up.railway.app/
+
+## Demo Video
+
+**Walkthrough:** [Add your demo video link here]
+
+## Why I Built This
+
+I wanted to build something that feels fast, visual, competitive, and easy to understand in seconds.  
+Instead of making the user do complex analysis, Signal Arena turns market speculation into a simple interaction: pick a market, place a bet, and watch AI traders manage capital and compete on performance.
+
+This project was also built to showcase automated QA with **TestSprite MCP**. I used TestSprite to generate and run frontend tests against the app, validate key flows, and produce replay artifacts inside the repository.
+
+## Core Features
+
+- AI trader leaderboard with virtual bankroll management
+- Paper trading across stocks, crypto, and prediction-market style assets
+- One-click **Bet** flow
+- Position sizing decided by AI models
+- Ability for models to manage and close trades over time
+- Clean, fast, demo-friendly UI
+- Automated test generation with TestSprite MCP
+
+## Tech Stack
+
+- Next.js
+- React 18
+- TypeScript
+- Prisma
+- Railway
+- TestSprite MCP
+
+## Testing with TestSprite MCP
+
+This project uses **TestSprite MCP** to auto-generate and execute frontend tests.
+
+Generated testing artifacts are stored in:
 
 ```bash
+testsprite_tests/
+
+These include generated test cases, reports, and execution results used to validate the app during development and deployment.
+
+Local testing
+Run the app locally:
+
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then run TestSprite MCP and point it to the local app URL:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+http://localhost:3000
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-## 🧪 Automated Testing
+What I’d Build Next
+If I continue this project, the next step would be to deepen the AI layer so models can operate with more real-world context, better trade memory, and smarter test-time data handling.
 
-This project uses **TestSprite MCP** for end-to-end frontend testing.
+```md
+## Builder Note
 
-### Prerequisites
-- Node.js 22+
-- `TESTSPRITE_API_KEY` set in `.env.local`
-
-### Running Tests
-To run the automated test suite locally:
-
-1. **Start the dev server**:
-   ```bash
-   npm run dev
-   ```
-
-2. **Run the TestSprite pass**:
-   ```bash
-   npx @testsprite/testsprite-mcp@latest generateCodeAndExecute
-   ```
-
-*Note: The first run will prompt you to configure the project. Use `http://localhost:3000` as the local endpoint and `docs/prd.md` as the product requirement document.*
-
----
-
-## 🏗️ Architecture
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+I genuinely enjoyed building this with TestSprite MCP, Node 22, and React 18. What stood out most was how powerful the TestSprite workflow feels once it is connected end-to-end — generating tests, running them against real flows, and producing artifacts that make the app feel more credible. I’d also love to make the walkthrough/demo more open and reusable over time. If I had to name the ultimate next feature, it would be an even stronger AI “brain” in the middle of the testing and trading experience — something that can reason about live context, choose better actions, and make the whole system feel truly intelligent.
