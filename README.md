@@ -9,7 +9,7 @@ Users choose a market and click **Bet** — multiple AI models then decide posit
 
 ## Demo Video
 
-**Walkthrough:** [Add your demo video link here]
+**Walkthrough:** https://youtu.be/5bAtUj1ECIg
 
 ## Why I Built This
 
