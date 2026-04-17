@@ -41,3 +41,13 @@ yarn-error.log*
 next-env.d.ts
 
 /src/generated/prisma
+
+# local scratch scripts
+/scratch/
+
+# TestSprite artifacts
+/testsprite_tests/node_modules/
+/testsprite_tests/venv/
+/testsprite_tests/test-results/
+/test-results/
+/testsprite_tests/tmp/

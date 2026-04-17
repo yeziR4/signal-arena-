@@ -150,6 +150,12 @@ export default function Home() {
                         <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">{market.symbol}</span>
                         <span className="w-1 h-1 rounded-full bg-zinc-800" />
                         <span className="text-[9px] font-black text-zinc-600 uppercase tracking-widest">{market.source}</span>
+                        {market.type === 'prediction_market' && market.metadata?.closeDisplay && (
+                          <>
+                            <span className="w-1 h-1 rounded-full bg-zinc-800" />
+                            <span className="text-[9px] font-black text-amber-500/80 uppercase tracking-widest bg-amber-500/10 px-1.5 py-0.5 rounded-md border border-amber-500/20">{market.metadata.closeDisplay}</span>
+                          </>
+                        )}
                       </div>
                     </div>
                   </div>

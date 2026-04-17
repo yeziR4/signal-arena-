@@ -102,14 +102,14 @@ export function isPolymarketUrl(input: string): boolean {
     return input.includes("polymarket.com");
 }
 
-export async function getTrendingPredictionMarkets(): Promise<ResolvedMarket[]> {
+export async function getClosingSoonPredictionMarkets(): Promise<ResolvedMarket[]> {
     if (!DOME_API_KEY) return [];
 
     try {
         const params = new URLSearchParams({
             status: "open",
-            limit: "5",
-            min_volume: "50000"
+            limit: "25", // Fetch a larger batch to sort locally
+            min_volume: "1000", // Lower threshold for "Closing Soon" variety
         });
 
         const res = await fetch(`${DOME_API_BASE}/polymarket/markets?${params.toString()}`, {
@@ -123,17 +123,31 @@ export async function getTrendingPredictionMarkets(): Promise<ResolvedMarket[]> 
         if (!res.ok) return [];
 
         const data = await res.json();
-        return (data.markets || []).map((market: any) => {
+        const now = Date.now();
+        
+        // Filter and sort by closing date (ascending)
+        const markets = (data.markets || [])
+            .filter((m: any) => m.end_date && new Date(m.end_date).getTime() > now)
+            .sort((a: any, b: any) => new Date(a.end_date).getTime() - new Date(b.end_date).getTime())
+            .slice(0, 6);
+
+        return markets.map((market: any) => {
             const probYes = parseFloat(market.outcome_prices?.[0] || "0.5");
+            const endDate = market.end_date ? new Date(market.end_date).toLocaleDateString() : "Soon";
+            
             return {
                 id: `pred-${market.condition_id || market.token_id}`,
                 symbol: market.market_slug?.toUpperCase().slice(0, 10) || "PRED",
                 name: market.question,
                 type: "prediction_market" as const,
                 currentPrice: probYes,
-                change24h: (Math.random() * 4 - 2),
+                change24h: (Math.random() * 4 - 2), // Simulated for UI feel
                 chartData: generatePredictionChart(probYes),
-                metadata: { volume: parseFloat(market.volume_total || market.volume || "0") },
+                metadata: { 
+                    volume: parseFloat(market.volume_total || market.volume || "0"),
+                    endDate: market.end_date,
+                    closeDisplay: `Closes ${endDate}`
+                },
                 source: "polymarket",
                 iconUrl: market.image || market.icon || undefined,
             };

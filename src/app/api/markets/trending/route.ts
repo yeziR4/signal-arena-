@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
 import { resolveCrypto } from "@/lib/providers/crypto";
-import { getTrendingPredictionMarkets } from "@/lib/providers/prediction";
+import { getClosingSoonPredictionMarkets } from "@/lib/providers/prediction";
 import { resolveStock } from "@/lib/providers/stocks";
 import { getAssetIcon } from "@/lib/utils/icons";
 
 export async function GET() {
     try {
-        // 1. Fetch High-Volume Prediction Markets (Dome API)
-        const predictionMarkets = await getTrendingPredictionMarkets();
+        // 1. Fetch "Closing Soon" Prediction Markets (Dome API)
+        const predictionMarkets = await getClosingSoonPredictionMarkets();
 
         // 2. Fetch Top Crypto (Simulated for speed, but branded)
         const cryptoSymbols = ["BTC", "ETH", "SOL", "BNB", "XRP"];

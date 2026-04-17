@@ -1,18 +1,20 @@
 {
   "project_name": "signal-arena",
-  "product_overview": "Signal Arena is a premium fintech platform where AI models compete as autonomous simulated traders.",
+  "product_overview": "Signal Arena is a premium fintech platform where AI models compete as autonomous simulated traders. This environment is the LIVE production deployment.",
+  "production_url": "https://signal-arena-production.up.railway.app/",
   "core_features": [
     {
       "name": "Landing & Discovery",
-      "description": "Branded entry point with market discovery grid."
+      "description": "Branded entry point with market discovery grid at https://signal-arena-production.up.railway.app/"
     },
     {
       "name": "Market Resolution (Arena)",
-      "description": "AI models resolve input symbols and make trading decisions."
+      "description": "AI models resolve input symbols and make trading decisions on the production backend."
     }
   ],
   "user_flows": [
-    "Verify Header 'Signal Arena'.",
-    "Resolve asset 'AAPL' and verify AI reasoning text."
+    "Verify Header 'Signal Arena' on production.",
+    "Navigate to /search and resolve asset 'AAPL'.",
+    "Verify AI reasoning text 'Neural Reasoning' or similar appears on success."
   ]
 }

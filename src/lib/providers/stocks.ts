@@ -96,6 +96,7 @@ export async function resolveStock(symbol: string): Promise<ProviderResult> {
                 low: quote.l,
                 open: quote.o,
                 prevClose: quote.pc,
+                volume: quote.v,
                 description: `${name} (${upperSymbol}) stock quote`,
             },
             source: "finnhub",

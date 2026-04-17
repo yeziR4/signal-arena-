@@ -4,8 +4,13 @@
 
 ## 1️⃣ Document Metadata
 - **Project Name:** signal-arena
+<<<<<<< HEAD
 - **Date:** 2026-04-14
 - **Prepared by:** Antigravity  from Local Host
+=======
+- **Date:** 2026-04-17
+- **Prepared by:** Antigravity (Restored from Local Host)
+>>>>>>> e552c23 (feat: finishing touches (stock volume, close-soon predictions) & restored test report)
 
 ---
 
@@ -55,4 +60,8 @@
 - **Leaderboard Data Display:** The leaderboard is currently failing to render its primary title/content on localhost. This suggests a potential issue with the Prisma connection or local data seeding.
 - **Server Dependency:** Tests emphasize the need for the local dev server to be running (verified up at port 3000).
 
+<<<<<<< HEAD
 ---
+=======
+---
+>>>>>>> e552c23 (feat: finishing touches (stock volume, close-soon predictions) & restored test report)

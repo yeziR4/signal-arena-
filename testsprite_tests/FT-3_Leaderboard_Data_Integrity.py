@@ -30,8 +30,8 @@ async def run_test():
         page = await context.new_page()
 
         # Interact with the page elements to simulate user flow
-        # -> Navigate to http://localhost:3000
-        await page.goto("http://localhost:3000")
+        # -> Navigate to https://signal-arena-production.up.railway.app
+        await page.goto("https://signal-arena-production.up.railway.app")
         
         # -> Click the 'Ranks' nav link to open the leaderboard page so I can check the title and leaderboard content.
         frame = context.pages[-1]
@@ -39,14 +39,14 @@ async def run_test():
         elem = frame.locator('xpath=/html/body/header/div/div/nav/a[3]').nth(0)
         await asyncio.sleep(3); await elem.click()
         
-        # -> Navigate directly to http://localhost:3000/leaderboard, wait for the page to load, then check the page text for the 'Arena Leaderboard' title and for trader top-3 cards and '% ROI' metrics.
-        await page.goto("http://localhost:3000/leaderboard")
+        # -> Navigate directly to https://signal-arena-production.up.railway.app/leaderboard, wait for the page to load, then check the page text for the 'Arena Leaderboard' title and for trader top-3 cards and '% ROI' metrics.
+        await page.goto("https://signal-arena-production.up.railway.app/leaderboard")
         
         # --> Assertions to verify final state
         frame = context.pages[-1]
-        assert await frame.locator("xpath=//*[contains(., 'Arena Leaderboard')]").nth(0).is_visible(), "The page should show the Arena Leaderboard title after navigation.",
-        assert await frame.locator("xpath=//*[contains(., 'Top 3')]").nth(0).is_visible(), "The leaderboard should show at least one trader card in the Top 3 podium.",
-        assert await frame.locator("xpath=//*[contains(., '% ROI')]").nth(0).is_visible(), "The leaderboard should display raw metrics like % ROI."]}
+        assert await frame.locator("xpath=//*[contains(., 'Arena Leaderboard')]").nth(0).is_visible(), "The page should show the Arena Leaderboard title after navigation."
+        assert await frame.locator("xpath=//*[contains(., 'Top 3')]").nth(0).is_visible(), "The leaderboard should show at least one trader card in the Top 3 podium."
+        assert await frame.locator("xpath=//*[contains(., '% ROI')]").nth(0).is_visible(), "The leaderboard should display raw metrics like % ROI."
         await asyncio.sleep(5)
 
     finally:
