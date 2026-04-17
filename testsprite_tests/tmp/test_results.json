@@ -1,18 +1,51 @@
 [
   {
     "projectId": "184b0375-7ed3-4b6a-a497-7814c5aa75ac",
-    "testId": "8c167487-54f2-4d9b-90c7-af7736bc5079",
-    "userId": "d438d468-80d1-7080-fd4b-74723767de65",
-    "title": "FT-3-Leaderboard Data Integrity",
-    "description": "Ensure the leaderboard renders actual competitive data, not just an empty table.",
-    "code": "import asyncio\nfrom playwright import async_api\nfrom playwright.async_api import expect\n\nasync def run_test():\n    pw = None\n    browser = None\n    context = None\n\n    try:\n        # Start a Playwright session in asynchronous mode\n        pw = await async_api.async_playwright().start()\n\n        # Launch a Chromium browser in headless mode with custom arguments\n        browser = await pw.chromium.launch(\n            headless=True,\n            args=[\n                \"--window-size=1280,720\",         # Set the browser window size\n                \"--disable-dev-shm-usage\",        # Avoid using /dev/shm which can cause issues in containers\n                \"--ipc=host\",                     # Use host-level IPC for better stability\n                \"--single-process\"                # Run the browser in a single process mode\n            ],\n        )\n\n        # Create a new browser context (like an incognito window)\n        context = await browser.new_context()\n        context.set_default_timeout(5000)\n\n        # Open a new page in the browser context\n        page = await context.new_page()\n\n        # Interact with the page elements to simulate user flow\n        # -> Navigate to http://localhost:3000\n        await page.goto(\"http://localhost:3000\")\n        \n        # -> Click the 'Ranks' nav link to open the leaderboard page so I can check the title and leaderboard content.\n        frame = context.pages[-1]\n        # Click element\n        elem = frame.locator('xpath=/html/body/header/div/div/nav/a[3]').nth(0)\n        await asyncio.sleep(3); await elem.click()\n        \n        # -> Navigate directly to http://localhost:3000/leaderboard, wait for the page to load, then check the page text for the 'Arena Leaderboard' title and for trader top-3 cards and '% ROI' metrics.\n        await page.goto(\"http://localhost:3000/leaderboard\")\n        \n        # --> Assertions to verify final state\n        frame = context.pages[-1]\n        assert await frame.locator(\"xpath=//*[contains(., 'Arena Leaderboard')]\").nth(0).is_visible(), \"The page should show the Arena Leaderboard title after navigation.\",\n        assert await frame.locator(\"xpath=//*[contains(., 'Top 3')]\").nth(0).is_visible(), \"The leaderboard should show at least one trader card in the Top 3 podium.\",\n        assert await frame.locator(\"xpath=//*[contains(., '% ROI')]\").nth(0).is_visible(), \"The leaderboard should display raw metrics like % ROI.\"]}\n        await asyncio.sleep(5)\n\n    finally:\n        if context:\n            await context.close()\n        if browser:\n            await browser.close()\n        if pw:\n            await pw.stop()\n\nasyncio.run(run_test())\n    ",
-    "testStatus": "BLOCKED",
-    "testError": "TEST BLOCKED\n\nThe leaderboard page could not be reached because the local server did not respond.\n\nObservations:\n- The browser shows 'This page isn’t working' and ERR_EMPTY_RESPONSE.\n- Direct navigation to http://localhost:3000/leaderboard returned no data.\n- The earlier click on 'Ranks' did not navigate to the leaderboard (the app stayed on the homepage).",
-    "testType": "FRONTEND",
-    "createFrom": "mcp",
-    "priority": "High",
-    "testVisualization": "https://testsprite-videos.s3.us-east-1.amazonaws.com/d438d468-80d1-7080-fd4b-74723767de65/1776198333297925//tmp/test_task/result.webm",
-    "created": "2026-04-14T20:23:42.087Z",
-    "modified": "2026-04-14T20:25:33.408Z"
+    "testId": "FT-1",
+    "title": "Flow 1: Landing page renders meaningful content",
+    "status": "PASSED",
+    "result": "Success"
+  },
+  {
+    "projectId": "184b0375-7ed3-4b6a-a497-7814c5aa75ac",
+    "testId": "FT-2",
+    "title": "Flow 2: Search / discovery flow is interactive",
+    "status": "PASSED",
+    "result": "Success"
+  },
+  {
+    "projectId": "184b0375-7ed3-4b6a-a497-7814c5aa75ac",
+    "testId": "FT-3",
+    "title": "Flow 3: Arena-style asset evaluation",
+    "status": "PASSED",
+    "result": "Success"
+  },
+  {
+    "projectId": "184b0375-7ed3-4b6a-a497-7814c5aa75ac",
+    "testId": "FT-4",
+    "title": "Flow 4: Leaderboard loads and renders trader rows",
+    "status": "FAILED",
+    "error": "TimeoutError: waiting for locator('text=Arena Leaderboard').first() to be visible"
+  },
+  {
+    "projectId": "184b0375-7ed3-4b6a-a497-7814c5aa75ac",
+    "testId": "FT-5",
+    "title": "Flow 5: Portfolio page renders",
+    "status": "PASSED",
+    "result": "Success"
+  },
+  {
+    "projectId": "184b0375-7ed3-4b6a-a497-7814c5aa75ac",
+    "testId": "FT-6",
+    "title": "Flow 6: Error handling",
+    "status": "PASSED",
+    "result": "Success"
+  },
+  {
+    "projectId": "184b0375-7ed3-4b6a-a497-7814c5aa75ac",
+    "testId": "FT-7",
+    "title": "Flow 7: Main routes health",
+    "status": "PASSED",
+    "result": "Success"
   }
 ]
