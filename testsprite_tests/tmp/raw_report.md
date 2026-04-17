@@ -1,43 +1,58 @@
-
-# TestSprite AI Testing Report(MCP)
+# TestSprite AI Testing Report (Localhost)
 
 ---
 
 ## 1️⃣ Document Metadata
 - **Project Name:** signal-arena
-- **Date:** 2026-04-14
-- **Prepared by:** TestSprite AI Team
+- **Date:** 2026-04-17
+- **Prepared by:** Antigravity  from Local Host
 
 ---
 
 ## 2️⃣ Requirement Validation Summary
 
-#### Test FT-3 Leaderboard Data Integrity
-- **Test Code:** [FT-3_Leaderboard_Data_Integrity.py](./FT-3_Leaderboard_Data_Integrity.py)
-- **Test Error:** TEST BLOCKED
+#### Flow 1: Landing Page Check
+- **Status:** ✅ PASSED
+- **Analysis:** Renders meaningful content, including "Market Discovery" and "Live Market Feed".
 
-The leaderboard page could not be reached because the local server did not respond.
+#### Flow 2: Search / Discovery Flow
+- **Status:** ✅ PASSED
+- **Analysis:** Successfully interacted with the search input for "AAPL" and navigated to the asset resolution view.
 
-Observations:
-- The browser shows 'This page isn’t working' and ERR_EMPTY_RESPONSE.
-- Direct navigation to http://localhost:3000/leaderboard returned no data.
-- The earlier click on 'Ranks' did not navigate to the leaderboard (the app stayed on the homepage).
-- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/184b0375-7ed3-4b6a-a497-7814c5aa75ac/8c167487-54f2-4d9b-90c7-af7736bc5079
-- **Status:** BLOCKED
-- **Analysis / Findings:** {{TODO:AI_ANALYSIS}}.
+#### Flow 3: Arena-style Asset Evaluation
+- **Status:** ✅ PASSED
+- **Analysis:** Evaluation flow completes correctly with visible loading states and AI output zones.
+
+#### Flow 4: Leaderboard Data Integrity
+- **Status:** ❌ FAILED
+- **Analysis:** The leaderboard page (http://localhost:3000/leaderboard) loaded but failed to show the "Arena Leaderboard" heading within 5000ms. This confirms a UI regression or data fetching issue on the local environment.
+
+#### Flow 5: Portfolio / Positions
+- **Status:** ✅ PASSED
+- **Analysis:** Portfolio page renders correctly with status metrics.
+
+#### Flow 6: Error Handling
+- **Status:** ✅ PASSED
+- **Analysis:** Proper error messages displayed when searching for invalid ticker symbols.
+
+#### Flow 7: Main Routes Health
+- **Status:** ✅ PASSED
+- **Analysis:** All main routes (/, /search, /leaderboard, /portfolio) returned status < 500.
+
 ---
-
 
 ## 3️⃣ Coverage & Matching Metrics
 
-- **0.00** of tests passed
+- **85.7%** of tests passed (6/7)
 
-| Requirement        | Total Tests | ✅ Passed | ❌ Failed  |
-|--------------------|-------------|-----------|------------|
-| ...                | ...         | ...       | ...        |
+| Requirement | Total Tests | ✅ Passed | ❌ Failed |
+|-------------|-------------|-----------|-----------|
+| Functional  | 7           | 6         | 1         |
+
 ---
 
-
 ## 4️⃣ Key Gaps / Risks
-{AI_GNERATED_KET_GAPS_AND_RISKS}
+- **Leaderboard Data Display:** The leaderboard is currently failing to render its primary title/content on localhost. This suggests a potential issue with the Prisma connection or local data seeding.
+- **Server Dependency:** Tests emphasize the need for the local dev server to be running (verified up at port 3000).
+
 ---
